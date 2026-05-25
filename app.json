@@ -1,0 +1,12 @@
+{
+    "expo": {
+        "name": "All Apps",
+        "slug": "all-apps",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "userInterfaceStyle": "light",
+        "assetBundlePatterns": [
+            "**/*"
+        ]
+    }
+}

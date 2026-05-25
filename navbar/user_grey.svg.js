@@ -1,0 +1,26 @@
+import * as React from "react";
+import Svg, { G, Path } from "react-native-svg";
+
+const UserGreyIcon = (props) => (
+  <Svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <G>
+      <Path
+        d="M20.011,15.843a15.156,15.156 0,0 0,-15.865 0A3.106,3.106 0,0 0,2.727 18.462v4.447L21.427,22.909v-4.447A3.107,3.107 0,0 0,20.011 15.843Z"
+        fill="#999"
+      />
+      <Path
+        d="M15.934,2.689a5.455,5.455 0,1 1,-7.714 0,5.454 5.454,0 0,1 7.714,0"
+        fill="#999"
+      />
+    </G>
+  </Svg>
+);
+
+export default UserGreyIcon;

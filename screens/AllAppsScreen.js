@@ -162,8 +162,14 @@ const SECTIONS = [
 const AllAppsScreen = () => (
   <SafeAreaView style={styles.container}>
     <StatusBar barStyle="dark-content" />
-    <ScrollView contentContainerStyle={styles.listContent}>
-      <View style={styles.header}>
+    <ScrollView
+      contentContainerStyle={styles.listContent}
+      stickyHeaderIndices={[1]}
+    >
+      <View style={styles.titleHeader}>
+        <Text style={styles.title}>All Apps</Text>
+      </View>
+      <View style={styles.stickyHeader}>
         <View style={styles.topBar}>
           <View style={styles.searchBox}>
             <SearchIcon width={16} height={16} />
@@ -177,7 +183,6 @@ const AllAppsScreen = () => (
             <GridIcon width={20} height={20} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>All Apps</Text>
       </View>
 
       {SECTIONS.map((section) => (
@@ -185,15 +190,20 @@ const AllAppsScreen = () => (
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
           </View>
-          {section.data.map((item) => (
-            <View key={item.id} style={styles.card}>
-              <View style={styles.iconWrap}>
-                <item.Icon width={42} height={42} />
+          {section.data.map((item, index) => (
+            <View key={item.id}>
+              <View style={styles.card}>
+                <View style={styles.iconWrap}>
+                  <item.Icon width={42} height={42} />
+                </View>
+                <View style={styles.textWrap}>
+                  <Text style={styles.itemTitle}>{item.title}</Text>
+                  <Text style={styles.itemDescription}>{item.description}</Text>
+                </View>
               </View>
-              <View style={styles.textWrap}>
-                <Text style={styles.itemTitle}>{item.title}</Text>
-                <Text style={styles.itemDescription}>{item.description}</Text>
-              </View>
+              {index < section.data.length - 1 && (
+                <View style={styles.separator} />
+              )}
             </View>
           ))}
         </View>
@@ -208,16 +218,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F5F7",
   },
   listContent: {
-    padding: 16,
     paddingBottom: 110,
   },
-  header: {
-    marginBottom: 8,
+  titleHeader: {
+    paddingTop: 16,
+    paddingBottom: 8,
+    paddingHorizontal: 16,
+    backgroundColor: "#F4F5F7",
+  },
+  stickyHeader: {
+    backgroundColor: "#F4F5F7",
+    paddingBottom: 8,
   },
   topBar: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    paddingHorizontal: 16,
   },
   searchBox: {
     flex: 1,
@@ -245,12 +261,11 @@ const styles = StyleSheet.create({
     color: "#151925",
   },
   sectionHeader: {
-    marginTop: 18,
-    marginBottom: 6,
+    marginTop: 16,
+    marginBottom: 0,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     backgroundColor: "#E6E7EA",
-    borderRadius: 8,
   },
   sectionTitle: {
     fontSize: 12,
@@ -261,11 +276,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 12,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#EFF0F2",
+    borderRadius: 0,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   iconWrap: {
     width: 48,
@@ -289,6 +302,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: "#6A6F7D",
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#E6E7EA",
+    marginLeft: 80,
   },
 });
 

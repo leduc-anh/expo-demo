@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     height: 64,
     paddingBottom: 8,
     paddingTop: 6,
+    marginBottom: 8,
   },
   tabLabel: {
     fontSize: 11,

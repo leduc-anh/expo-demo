@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import SearchIcon from "../apps/search.svg.js";
 import GridIcon from "../apps/grid.svg.js";
@@ -164,11 +164,8 @@ const AllAppsScreen = () => (
     <StatusBar barStyle="dark-content" />
     <ScrollView
       contentContainerStyle={styles.listContent}
-      stickyHeaderIndices={[1]}
+      stickyHeaderIndices={[0]}
     >
-      <View style={styles.titleHeader}>
-        <Text style={styles.title}>All Apps</Text>
-      </View>
       <View style={styles.stickyHeader}>
         <View style={styles.topBar}>
           <View style={styles.searchBox}>
@@ -183,6 +180,9 @@ const AllAppsScreen = () => (
             <GridIcon width={20} height={20} />
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={styles.titleHeader}>
+        <Text style={styles.title}>MyApp</Text>
       </View>
 
       {SECTIONS.map((section) => (

@@ -10,9 +10,11 @@ import FileGreyIcon from "./navbar/file_grey.svg.js";
 import CoinIcon from "./navbar/coin.svg.js";
 import GameGreyIcon from "./navbar/game_grey.svg.js";
 import UserGreyIcon from "./navbar/user_grey.svg.js";
+import UserBlueIcon from "./navbar/user_blue.svg.js";
 
 import AllAppsScreen from "./screens/AllAppsScreen.js";
 import SimpleScreen from "./screens/SimpleScreen.js";
+import ProfileScreen from "./screens/ProfileScreen.js";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,10 +75,15 @@ const App = () => (
       <Tab.Screen
         name="Profile"
         options={{
-          tabBarIcon: () => <UserGreyIcon width={22} height={22} />,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <UserBlueIcon width={28} height={28} />
+            ) : (
+              <UserGreyIcon width={22} height={22} />
+            ),
         }}
       >
-        {() => <SimpleScreen title="Profile" />}
+        {() => <ProfileScreen />}
       </Tab.Screen>
     </Tab.Navigator>
   </NavigationContainer>
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
     height: 64,
     paddingBottom: 8,
     paddingTop: 6,
-    marginBottom: 8,
+    marginBottom: 18,
   },
   tabLabel: {
     fontSize: 11,

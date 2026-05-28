@@ -66,7 +66,7 @@ const SECTIONS = [
       {
         id: "tasks",
         title: "My Tasks",
-        description: "Manage your assigned tasks and approvals",
+        description: "",
         Icon: TaskIcon,
       },
     ],
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     color: "#151925",
   },
   sectionHeader: {
-    marginTop: 16,
+    marginTop: 0,
     marginBottom: 0,
     paddingVertical: 6,
     paddingHorizontal: 16,

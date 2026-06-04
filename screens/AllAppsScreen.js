@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import SearchIcon from "../apps/search.svg.js";
 import GridIcon from "../apps/grid.svg.js";
+import ListIcon from "../apps/list.svg.js";
 
 import ApproveIcon from "../apps/approve.svg.js";
 import RewardIcon from "../apps/reward.svg.js";
@@ -159,58 +160,101 @@ const SECTIONS = [
   },
 ];
 
-const AllAppsScreen = () => (
-  <SafeAreaView style={styles.container}>
-    <StatusBar barStyle="dark-content" />
-    <ScrollView
-      contentContainerStyle={styles.listContent}
-      stickyHeaderIndices={[0]}
-    >
-      <View style={styles.stickyHeader}>
-        <View style={styles.topBar}>
-          <View style={styles.searchBox}>
-            <SearchIcon width={16} height={16} />
-            <TextInput
-              placeholder="Type feature's name"
-              placeholderTextColor="#A0A3AA"
-              style={styles.searchInput}
-            />
-          </View>
-          <TouchableOpacity style={styles.gridButton}>
-            <GridIcon width={20} height={20} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.titleHeader}>
-        <Text style={styles.title}>MyApp</Text>
-      </View>
+const AllAppsScreen = () => {
+  const [searchText, setSearchText] = useState("");
+  const [isGridView, setIsGridView] = useState(false);
 
-      {SECTIONS.map((section) => (
-        <View key={section.title}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-          </View>
-          {section.data.map((item, index) => (
-            <View key={item.id}>
-              <View style={styles.card}>
-                <View style={styles.iconWrap}>
-                  <item.Icon width={42} height={42} />
-                </View>
-                <View style={styles.textWrap}>
-                  <Text style={styles.itemTitle}>{item.title}</Text>
-                  <Text style={styles.itemDescription}>{item.description}</Text>
-                </View>
-              </View>
-              {index < section.data.length - 1 && (
-                <View style={styles.separator} />
-              )}
+  const filteredSections = useMemo(() => {
+    const keyword = searchText.trim().toLowerCase();
+    if (!keyword) {
+      return SECTIONS;
+    }
+
+    return SECTIONS.map((section) => ({
+      ...section,
+      data: section.data.filter((item) =>
+        item.title.toLowerCase().includes(keyword),
+      ),
+    })).filter((section) => section.data.length > 0);
+  }, [searchText]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView
+        contentContainerStyle={styles.listContent}
+        stickyHeaderIndices={[0]}
+      >
+        <View style={styles.stickyHeader}>
+          <View style={styles.topBar}>
+            <View style={styles.searchBox}>
+              <SearchIcon width={16} height={16} />
+              <TextInput
+                placeholder="Type feature's name"
+                placeholderTextColor="#A0A3AA"
+                style={styles.searchInput}
+                value={searchText}
+                onChangeText={setSearchText}
+              />
             </View>
-          ))}
+            <TouchableOpacity
+              style={styles.gridButton}
+              onPress={() => setIsGridView((prev) => !prev)}
+            >
+              {isGridView ? (
+                <ListIcon width={20} height={20} />
+              ) : (
+                <GridIcon width={20} height={20} />
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-      ))}
-    </ScrollView>
-  </SafeAreaView>
-);
+        <View style={styles.titleHeader}>
+          <Text style={styles.title}>MyApp</Text>
+        </View>
+
+        {filteredSections.map((section) => (
+          <View key={section.title}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+            </View>
+            {isGridView ? (
+              <View style={styles.gridWrap}>
+                {section.data.map((item) => (
+                  <View key={item.id} style={styles.gridItem}>
+                    <View style={styles.gridIconWrap}>
+                      <item.Icon width={38} height={38} />
+                    </View>
+                    <Text style={styles.gridLabel}>{item.title}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              section.data.map((item, index) => (
+                <View key={item.id}>
+                  <View style={styles.card}>
+                    <View style={styles.iconWrap}>
+                      <item.Icon width={38} height={38} />
+                    </View>
+                    <View style={styles.textWrap}>
+                      <Text style={styles.itemTitle}>{item.title}</Text>
+                      <Text style={styles.itemDescription}>
+                        {item.description}
+                      </Text>
+                    </View>
+                  </View>
+                  {index < section.data.length - 1 && (
+                    <View style={styles.separator} />
+                  )}
+                </View>
+              ))
+            )}
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -281,9 +325,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   iconWrap: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F1F4FF",
@@ -307,6 +351,33 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#E6E7EA",
     marginLeft: 80,
+  },
+  gridWrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    backgroundColor: "#FFFFFF",
+  },
+  gridItem: {
+    width: "25%",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  gridIconWrap: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#EAF0FF",
+  },
+  gridLabel: {
+    marginTop: 8,
+    fontSize: 12,
+    color: "#2B2F38",
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 
